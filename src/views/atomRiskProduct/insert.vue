@@ -34,6 +34,16 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="信任源服务实现" prop="caller">
+        <el-select v-model="form.caller" placeholder="选择信任源服务实现" name="caller" class="show-half">
+          <el-option
+            v-for="item in callerList"
+            :key="item.impl"
+            :label="item.name"
+            :value="item.impl"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="同风控项优先级" prop="url">
         <el-slider
           v-model="form.level"
@@ -79,6 +89,7 @@ export default {
     return {
       sourceRiskProductList: [],
       atomRiskTypeList: [],
+      callerList: [],
       types: [{
         value: 'personal',
         label: '个人'
@@ -91,12 +102,14 @@ export default {
         sourceRiskProductChoose: [],
         name: '',
         level: 50,
+        caller: '',
         atomRiskTypeId: ''
       },
       loginRules: {
         name: [{ required: true, trigger: 'blur', validator: validateParamString }],
         atomRiskTypeId: [{ required: true, trigger: 'blur', validator: validateParamSelect }],
         sourceRiskProductChoose: [{ required: true, trigger: 'blur', validator: validateSelectArray }],
+        caller: [{ required: true, trigger: 'blur', validator: validateParamString }],
         types: [{ required: true, trigger: 'blur', validator: validateParamString }]
       },
       passwordType: 'password'
@@ -120,6 +133,14 @@ export default {
         this.loading = false
         reject(error)
       })
+      const callerListUrl = 'atomRiskProduct/findCallerList'
+      findList(callerListUrl, {}).then(response => {
+        this.callerList = response.data.items
+        resolve()
+      }).catch(error => {
+        this.loading = false
+        reject(error)
+      })
     })
   },
   methods: {
@@ -129,7 +150,7 @@ export default {
         if (valid) {
           this.loading = true
           const url = 'atomRiskProduct/insert'
-          const data = { name: this.form.name, level: this.form.level, atomRiskTypeId: this.form.atomRiskTypeId, types: this.form.types }
+          const data = { name: this.form.name, level: this.form.level, atomRiskTypeId: this.form.atomRiskTypeId, types: this.form.types, caller: this.form.caller }
           return new Promise((resolve, reject) => {
             insert(url, { entity: data, spare: this.form.sourceRiskProductChoose }).then(response => {
               this.$router.push({ path: this.redirect || '/atomRiskProduct/list' })

@@ -4,15 +4,6 @@
       <el-form-item label="信任源名称" prop="name">
         <el-input v-model="form.name" name="name" />
       </el-form-item>
-      <el-form-item label="接口密钥" prop="appId">
-        <el-input v-model="form.appId" name="appId" />
-      </el-form-item>
-      <el-form-item label="接口密钥" prop="secretKey">
-        <el-input :key="passwordType" v-model="form.secretKey" :type="passwordType" name="secretKey" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
         <el-button @click="onCancel">取消</el-button>
@@ -37,13 +28,10 @@ export default {
     return {
       form: {
         id: '',
-        name: '',
-        appId: '',
-        secretKey: ''
+        name: ''
       },
       loginRules: {
-        name: [{ required: true, trigger: 'blur', validator: validateParamString }],
-        appId: [{ required: true, trigger: 'blur', validator: validateParamString }]
+        name: [{ required: true, trigger: 'blur', validator: validateParamString }]
       },
       passwordType: 'password'
     }
@@ -57,7 +45,6 @@ export default {
           const res = response.data
           this.form.id = id
           this.form.name = res.name
-          this.form.appId = res.appId
           resolve()
         }).catch(error => {
           this.loading = false
@@ -72,16 +59,6 @@ export default {
     onCancel() {
       this.$router.push({ path: this.redirect || '/sourceRiskConfig/list' })
       this.loading = false
-    },
-    showPwd() {
-      if (this.passwordType === 'password') {
-        this.passwordType = ''
-      } else {
-        this.passwordType = 'password'
-      }
-      this.$nextTick(() => {
-        this.$refs.password.focus()
-      })
     },
     onSubmit() {
       this.$refs.form.validate(valid => {
@@ -113,12 +90,6 @@ export default {
 <style scoped>
 .line{
   text-align: center;
-}
-.show-pwd {
-    position: absolute;
-    right: 20px;
-    top: 2px;
-    font-size: 16px
 }
 </style>
 

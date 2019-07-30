@@ -7,6 +7,15 @@
       <el-form-item label="信任源风控服务url" prop="url">
         <el-input v-model="form.url" name="url" />
       </el-form-item>
+      <el-form-item label="接口密钥" prop="appId">
+        <el-input v-model="form.appId" name="appId" />
+      </el-form-item>
+      <el-form-item label="接口密钥" prop="secretKey">
+        <el-input :key="passwordType" v-model="form.secretKey" :type="passwordType" name="secretKey" />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
+      </el-form-item>
       <el-form-item label="信任源风控服务单价" prop="price">
         <el-input v-model="form.price" name="price" placeholder="单位：元" />
       </el-form-item>
@@ -17,16 +26,6 @@
             :key="item.id"
             :label="item.name"
             :value="item.id"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="信任源服务实现" prop="caller">
-        <el-select v-model="form.caller" placeholder="选择信任源服务实现" name="caller">
-          <el-option
-            v-for="item in callerList"
-            :key="item.impl"
-            :label="item.name"
-            :value="item.impl"
           />
         </el-select>
       </el-form-item>
@@ -67,21 +66,21 @@ export default {
     }
     return {
       sourceRiskConfigList: [],
-      callerList: [],
       form: {
         id: '',
         name: '',
         price: '',
         url: '',
-        caller: '',
-        sourceRiskConfigId: ''
+        sourceRiskConfigId: '',
+        appId: '',
+        secretKey: ''
       },
       loginRules: {
         name: [{ required: true, trigger: 'blur', validator: validateParamString }],
         price: [{ required: true, trigger: 'blur', validator: validateParamPrice }],
         url: [{ required: true, trigger: 'blur', validator: validateParamString }],
-        caller: [{ required: true, trigger: 'blur', validator: validateParamString }],
-        sourceRiskConfigId: [{ required: true, trigger: 'blur', validator: validateParamSelect }]
+        sourceRiskConfigId: [{ required: true, trigger: 'blur', validator: validateParamSelect }],
+        appId: [{ required: true, trigger: 'blur', validator: validateParamString }]
       },
       passwordType: 'password'
     }
@@ -99,7 +98,7 @@ export default {
             this.form.name = res.name
             this.form.price = res.price
             this.form.url = res.url
-            this.form.caller = res.caller
+            this.form.appId = res.appId
             this.form.sourceRiskConfigId = res.sourceRiskConfigId
             resolve()
           }).catch(error => {
@@ -110,15 +109,6 @@ export default {
           const sourceRiskConfigListUrl = 'sourceRiskConfig/findList'
           findList(sourceRiskConfigListUrl, {}).then(response => {
             this.sourceRiskConfigList = response.data.items
-            resolve()
-          }).catch(error => {
-            this.loading = false
-            reject(error)
-          })
-          // 获取信任源实现列表
-          const callerListUrl = 'sourceRiskConfig/findCallerList'
-          findList(callerListUrl, {}).then(response => {
-            this.callerList = response.data.items
             resolve()
           }).catch(error => {
             this.loading = false
@@ -154,6 +144,16 @@ export default {
         }
       })
     },
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
     onCancel() {
       this.$router.push({ path: this.redirect || '/sourceRiskProduct/list' })
       this.loading = false
@@ -165,6 +165,12 @@ export default {
 <style scoped>
 .line{
   text-align: center;
+}
+.show-pwd {
+  position: absolute;
+  right: 20px;
+  top: 2px;
+  font-size: 16px
 }
 </style>
 

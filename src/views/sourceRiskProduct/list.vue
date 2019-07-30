@@ -13,8 +13,8 @@
             <el-form-item label="信任源风控服务url">
               <span>{{ props.row.url }}</span>
             </el-form-item>
-            <el-form-item label="信任源服务实现">
-              <span>{{ props.row.caller | callerFilter }}</span>
+            <el-form-item label="接口密钥">
+              <span>{{ props.row.appId }}</span>
             </el-form-item>
             <el-form-item label="最后更新时间">
               <i class="el-icon-time" />
@@ -51,7 +51,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
-          <el-button type="success" size="small" @click="$router.push({ name: 'sourceRiskProductDetail', params: { id: scope.row.id }})">查看</el-button>
+          <!-- <el-button type="success" size="small" @click="$router.push({ name: 'sourceRiskProductDetail', params: { id: scope.row.id }})">查看</el-button> -->
           <el-button type="primary" size="small" @click="$router.push({ name: 'sourceRiskProductUpdate', params: { id: scope.row.id }})">编辑</el-button>
           <el-button type="danger" size="small" @click.native.prevent="deleteData(scope.$index, list, scope.row)">删除</el-button>
         </template>
@@ -83,20 +83,12 @@ export default {
           return sourceRiskConfig.name
         }
       }
-    },
-    callerFilter(impl) {
-      for (const caller of vm.callerList) {
-        if (caller.impl === impl) {
-          return caller.name
-        }
-      }
     }
   },
   data() {
     vm = this
     return {
       sourceRiskConfigList: [],
-      callerList: [],
       currentPage: 1,
       pageSize: 10,
       total: 1,
@@ -110,14 +102,6 @@ export default {
       const sourceRiskConfigListUrl = 'sourceRiskConfig/findList'
       findList(sourceRiskConfigListUrl, {}).then(response => {
         this.sourceRiskConfigList = response.data.items
-        resolve()
-      }).catch(error => {
-        this.loading = false
-        reject(error)
-      })
-      const callerListUrl = 'sourceRiskConfig/findCallerList'
-      findList(callerListUrl, {}).then(response => {
-        this.callerList = response.data.items
         resolve()
       }).catch(error => {
         this.loading = false

@@ -10,9 +10,6 @@
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="table-expand">
-            <el-form-item label="接口账号">
-              <span>{{ props.row.appId }}</span>
-            </el-form-item>
             <!-- <el-form-item label="信任源状态">
               <span>{{ props.row.status=="0" ? "启用" : "已禁用" }}</span>
             </el-form-item> -->

@@ -4,15 +4,6 @@
       <el-form-item label="信任源名称" prop="name">
         <el-input v-model="form.name" name="name" />
       </el-form-item>
-      <el-form-item label="接口密钥" prop="appId">
-        <el-input v-model="form.appId" name="appId" />
-      </el-form-item>
-      <el-form-item label="接口密钥" prop="secretKey">
-        <el-input :key="passwordType" v-model="form.secretKey" :type="passwordType" name="secretKey" />
-        <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-        </span>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">保存</el-button>
         <el-button @click="onCancel">取消</el-button>
@@ -36,14 +27,10 @@ export default {
     }
     return {
       form: {
-        name: '',
-        appId: '',
-        secretKey: ''
+        name: ''
       },
       loginRules: {
-        name: [{ required: true, trigger: 'blur', validator: validateParamString }],
-        appId: [{ required: true, trigger: 'blur', validator: validateParamString }],
-        secretKey: [{ required: true, trigger: 'blur', validator: validateParamString }]
+        name: [{ required: true, trigger: 'blur', validator: validateParamString }]
       },
       passwordType: 'password'
     }
@@ -65,7 +52,7 @@ export default {
         if (valid) {
           this.loading = true
           const url = 'sourceRiskConfig/insert'
-          const data = { name: this.form.name, appId: this.form.appId, secretKey: this.form.secretKey }
+          const data = { name: this.form.name }
           return new Promise((resolve, reject) => {
             insert(url, data).then(response => {
               this.$router.push({ path: this.redirect || '/sourceRiskConfig/list' })

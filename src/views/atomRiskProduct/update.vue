@@ -34,6 +34,16 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="信任源服务实现" prop="caller">
+        <el-select v-model="form.caller" placeholder="选择信任源服务实现" name="caller" class="show-half">
+          <el-option
+            v-for="item in callerList"
+            :key="item.impl"
+            :label="item.name"
+            :value="item.impl"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="同风控项优先级" prop="url">
         <el-slider
           v-model="form.level"
@@ -79,6 +89,7 @@ export default {
     return {
       sourceRiskProductList: [],
       atomRiskTypeList: [],
+      callerList: [],
       types: [{
         value: 'personal',
         label: '个人'
@@ -90,6 +101,7 @@ export default {
         types: '',
         id: '',
         sourceRiskProductChoose: [],
+        caller: '',
         name: '',
         level: 0,
         atomRiskTypeId: ''
@@ -97,6 +109,7 @@ export default {
       loginRules: {
         name: [{ required: true, trigger: 'blur', validator: validateParamString }],
         atomRiskTypeId: [{ required: true, trigger: 'blur', validator: validateParamSelect }],
+        caller: [{ required: true, trigger: 'blur', validator: validateParamString }],
         sourceRiskProductChoose: [{ required: true, trigger: 'blur', validator: validateSelectArray }],
         types: [{ required: true, trigger: 'blur', validator: validateParamString }]
       },
@@ -116,6 +129,7 @@ export default {
           this.form.types = res.types
           this.form.atomRiskTypeId = res.atomRiskTypeId
           this.form.level = res.level
+          this.form.caller = res.caller
           this.form.status = res.status
           this.form.createTime = res.createTime
           this.form.lastModifiedDate = res.lastModifiedDate
@@ -154,6 +168,15 @@ export default {
           this.loading = false
           reject(error)
         })
+        // 获取信任源实现列表
+        const callerListUrl = 'atomRiskProduct/findCallerList'
+        findList(callerListUrl, {}).then(response => {
+          this.callerList = response.data.items
+          resolve()
+        }).catch(error => {
+          this.loading = false
+          reject(error)
+        })
       })
     } else {
       this.onCancel()
@@ -166,7 +189,7 @@ export default {
         if (valid) {
           this.loading = true
           const url = 'atomRiskProduct/update'
-          const data = { id: this.form.id, name: this.form.name, level: this.form.level, atomRiskTypeId: this.form.atomRiskTypeId, types: this.form.types }
+          const data = { id: this.form.id, name: this.form.name, level: this.form.level, atomRiskTypeId: this.form.atomRiskTypeId, types: this.form.types, caller: this.form.caller }
           return new Promise((resolve, reject) => {
             update(url, { entity: data, spare: this.form.sourceRiskProductChoose }).then(response => {
               this.$router.push({ path: this.redirect || '/atomRiskProduct/list' })

@@ -20,6 +20,9 @@
       <el-form-item label="风控类型：" prop="appId">
         {{ data.types | typesFilter }}
       </el-form-item>
+      <el-form-item label="信任源服务实现：" prop="appId">
+        {{ data.caller | callerFilter }}
+      </el-form-item>
       <el-form-item label="同风控项优先级：" prop="appId">
         {{ data.level }}
       </el-form-item>
@@ -65,6 +68,13 @@ export default {
         'enterprise': '企业'
       }
       return typesMap[value]
+    },
+    callerFilter(impl) {
+      for (const caller of vm.callerList) {
+        if (caller.impl === impl) {
+          return caller.name
+        }
+      }
     }
   },
   data() {
@@ -72,6 +82,7 @@ export default {
     return {
       sourceRiskProductList: [],
       atomRiskTypeList: [],
+      callerList: [],
       data: {}
     }
   },
@@ -82,13 +93,6 @@ export default {
         const findByIdUrl = 'atomRiskProduct/findById/' + id
         find(findByIdUrl).then(response => {
           this.data = response.data
-          // this.data.id = id
-          // this.data.name = res.name
-          // this.data.atomRiskTypeId = res.atomRiskTypeId
-          // this.data.level = res.level
-          // this.data.status = res.status
-          // this.data.createTime = res.createTime
-          // this.data.lastModifiedDate = res.lastModifiedDate
           resolve()
         }).catch(error => {
           this.loading = false
@@ -105,6 +109,14 @@ export default {
         const findByAtomRiskProductIdUrl = 'sourceRiskProduct/findByAtomRiskProductId/' + id
         find(findByAtomRiskProductIdUrl).then(response => {
           this.sourceRiskProductList = response.data.items
+          resolve()
+        }).catch(error => {
+          this.loading = false
+          reject(error)
+        })
+        const callerListUrl = 'atomRiskProduct/findCallerList'
+        findList(callerListUrl, {}).then(response => {
+          this.callerList = response.data.items
           resolve()
         }).catch(error => {
           this.loading = false
