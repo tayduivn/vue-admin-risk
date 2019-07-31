@@ -7,7 +7,7 @@
       <el-form-item label="信任源风控服务url" prop="url">
         <el-input v-model="form.url" name="url" />
       </el-form-item>
-      <el-form-item label="接口密钥" prop="appId">
+      <el-form-item label="接口账号" prop="appId">
         <el-input v-model="form.appId" name="appId" />
       </el-form-item>
       <el-form-item label="接口密钥" prop="secretKey">

@@ -176,7 +176,7 @@ export const constantRoutes = [
       {
         path: 'sourceRiskProductS',
         name: 'sourceRiskProductS',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/statistical/list'),
         meta: { title: '信任源服务统计', icon: 'sourceInfo' }
       }
     ]

@@ -13,7 +13,7 @@
             <el-form-item label="信任源风控服务url">
               <span>{{ props.row.url }}</span>
             </el-form-item>
-            <el-form-item label="接口密钥">
+            <el-form-item label="接口账号">
               <span>{{ props.row.appId }}</span>
             </el-form-item>
             <el-form-item label="最后更新时间">

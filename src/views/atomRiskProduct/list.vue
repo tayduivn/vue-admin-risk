@@ -24,22 +24,20 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="风控类型" align="center">
+      <el-table-column label="优先级" align="center">
         <template slot-scope="scope">
-          <span>
-            {{ scope.row.types | typesFilter }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="创建时间" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          <span>{{ scope.row.level }}</span>
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
           <!-- <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status?"启用":"禁用" }}</el-tag> -->
           {{ scope.row.status == "0"?"启用":"已禁用" }}
+        </template>
+      </el-table-column>
+      <el-table-column label="创建时间" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作">
