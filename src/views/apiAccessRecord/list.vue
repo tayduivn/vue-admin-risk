@@ -181,6 +181,9 @@ export default {
       this.listLoading = true
       const url = '/apiAccessRecord/findPage'
       return new Promise((resolve, reject) => {
+        if (this.startAndEndDate == null) {
+          this.startAndEndDate = []
+        }
         findPage(url, this.entity, { currentPage: this.currentPage - 1, pageSize: this.pageSize, beginCreateTime: this.startAndEndDate[0], endCreateTime: this.startAndEndDate[1] }).then(response => {
           this.list = response.data.items
           this.listLoading = false
