@@ -147,23 +147,26 @@ export default {
   data() {
     vm = this
     return {
+      sourceRiskProductList: [],
       atomRiskTypeName: '',
       atomRiskProductList: [],
       atomRiskTypeList: [],
-      sourceAccessRecords: {
+      sourceAccessRecords: [{
         baseParameter: {},
         baseResult: {},
         successful: '',
         errorMessage: '',
         createTime: '',
         sourceRiskProductId: ''
-      },
+      }],
       data: {
+        id: '',
         apiRequest: {},
         apiResult: {},
         successful: '',
         errorMessage: '',
-        createTime: ''
+        createTime: '',
+        atomRiskProductId: ''
       }
     }
   },
