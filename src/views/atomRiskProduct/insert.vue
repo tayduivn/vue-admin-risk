@@ -4,13 +4,13 @@
       <el-form-item label="原子风控服务名称" prop="name">
         <el-input v-model="form.name" name="name" />
       </el-form-item>
-      <el-form-item label="信任源风控服务" prop="sourceRiskProductChoose">
-        <el-select v-model="form.sourceRiskProductChoose" class="show-half" multiple placeholder="可选择一项或多项" name="sourceRiskProductChoose">
+      <el-form-item label="风控类型" prop="types">
+        <el-select v-model="form.types" placeholder="请选择风控类型" name="types" class="show-half">
           <el-option
-            v-for="item in sourceRiskProductList"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
+            v-for="item in types"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
           />
         </el-select>
       </el-form-item>
@@ -24,13 +24,13 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="风控类型" prop="types">
-        <el-select v-model="form.types" placeholder="请选择风控类型" name="types" class="show-half">
+      <el-form-item label="信任源风控服务" prop="sourceRiskProductChoose">
+        <el-select v-model="form.sourceRiskProductChoose" class="show-half" multiple placeholder="可选择一项或多项" name="sourceRiskProductChoose">
           <el-option
-            v-for="item in types"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in sourceRiskProductList"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           />
         </el-select>
       </el-form-item>
@@ -152,7 +152,7 @@ export default {
           const url = 'atomRiskProduct/insert'
           const data = { name: this.form.name, level: this.form.level, atomRiskTypeId: this.form.atomRiskTypeId, types: this.form.types, caller: this.form.caller }
           return new Promise((resolve, reject) => {
-            insert(url, { entity: data, spare: this.form.sourceRiskProductChoose }).then(response => {
+            insert(url, { entity: data, ids: this.form.sourceRiskProductChoose }).then(response => {
               this.$router.push({ path: this.redirect || '/atomRiskProduct/list' })
               this.loading = false
               resolve()

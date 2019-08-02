@@ -123,7 +123,7 @@ export const constantRoutes = [
         path: 'atomRiskTypeList',
         name: 'atomRiskTypeList',
         component: () => import('@/views/atomRiskType/list'),
-        meta: { title: '原子风控项列表', icon: 'list' }
+        meta: { title: '原子风控项列表', icon: 'tags' }
       },
       {
         path: 'list',
@@ -154,11 +154,11 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/statistical',
+    path: '/statistics',
     component: Layout,
-    redirect: '/statistical/apiAccessRecordList',
+    redirect: '/statistics/apiAccessRecordList',
     name: '统计管理',
-    meta: { title: '统计管理', icon: 'statistical' },
+    meta: { title: '统计管理', icon: 'statistics' },
     children: [
       {
         path: 'apiAccessRecordList',
@@ -174,10 +174,16 @@ export const constantRoutes = [
         meta: { title: 'API风控服务记录详情', icon: 'save' }
       },
       {
-        path: 'sourceRiskProductS',
-        name: 'sourceRiskProductS',
-        component: () => import('@/views/statistical/list'),
-        meta: { title: '信任源服务统计', icon: 'sourceInfo' }
+        path: 'bill',
+        name: 'statisticsBill',
+        component: () => import('@/views/statistics/bill'),
+        meta: { title: '信任源服务账单', icon: 'yuan' }
+      },
+      {
+        path: 'count',
+        name: 'statisticsCount',
+        component: () => import('@/views/statistics/count'),
+        meta: { title: '风控服务统计', icon: 'sourceInfo' }
       }
     ]
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="el-search">
+    <div>
       <el-date-picker
         v-model="startAndEndDate"
         type="daterange"
@@ -14,22 +14,6 @@
         value-format="yyyy-MM-dd HH:mm:ss"
         class="el-date-picker-search"
       />
-      <el-select v-model="entity.successful" clearable placeholder="请选择调用结果">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      <el-select v-model="entity.atomRiskProductId" clearable placeholder="请选择原子风控服务">
-        <el-option
-          v-for="item in atomRiskProductList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
-        />
-      </el-select>
       <el-button type="primary" plain @click="fetchData">&nbsp;搜索记录&nbsp;</el-button>
       <span />
       <el-button type="primary" plain @click="clearUp">&nbsp;清空条件&nbsp;</el-button>
@@ -41,31 +25,30 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="编号" align="center">
+      <el-table-column label="数据源风控服务" align="center">
         <template slot-scope="scope">
-          {{ scope.row.id }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="调用时间" align="center">
+      <el-table-column label="所属数据源" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime }}</span>
+          {{ scope.row.sourceConfigName }}
         </template>
       </el-table-column>
-      <el-table-column label="调用结果" align="center">
+      <el-table-column label="成功次数/调用总数" align="center">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.successful | successfulFilter">{{ scope.row.successful=="0"?"成功":"失败" }}</el-tag>
+          <span>{{ scope.row.success }} / {{ scope.row.total }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="调用原子风控服务" align="center">
+      <el-table-column label="服务单价（元）" align="center">
         <template slot-scope="scope">
-          <span>
-            {{ scope.row.atomRiskProductId | atomRiskProductFilter }}
-          </span>
+          <span>{{ scope.row.price }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column label="账单总价（元）" align="center">
         <template slot-scope="scope">
-          <el-button type="success" size="small" @click="$router.push({ name: 'apiAccessRecordDetail', params: { id: scope.row.id }})">查看详情</el-button>
+          <svg-icon icon-class="yuan1" />
+          <span>{{ scope.row.totalPrice }}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -83,34 +66,28 @@
 </template>
 
 <script>
-import { findPage, findList } from '@/api/table'
+import { findPage } from '@/api/table'
 
-let vm = {}
 export default {
   filters: {
-    atomRiskProductFilter(id) {
-      for (const atomRiskProduct of vm.atomRiskProductList) {
-        if (atomRiskProduct.id === id) {
-          return atomRiskProduct.name
+    statusFilter(successRate) {
+      if (successRate) {
+        if (successRate >= 80) {
+          return 'success'
         }
+        if (successRate >= 60 && successRate < 80) {
+          return 'warning'
+        } else {
+          return 'exception'
+        }
+      } else {
+        return 'exception'
       }
-    },
-    successfulFilter(successful) {
-      const successfulMap = {
-        '0': 'success',
-        '1': 'danger'
-      }
-      return successfulMap[successful]
     }
   },
   data() {
-    vm = this
     return {
       startAndEndDate: [],
-      entity: {
-        successful: '',
-        atomRiskProductId: ''
-      },
       currentPage: 1,
       pageSize: 10,
       atomRiskProductList: [],
@@ -143,28 +120,11 @@ export default {
             picker.$emit('pick', [start, end])
           }
         }]
-      },
-      options: [{
-        value: '0',
-        label: '成功'
-      }, {
-        value: '1',
-        label: '失败'
-      }]
+      }
     }
   },
   created() {
     this.fetchData()
-    return new Promise((resolve, reject) => {
-      const atomRiskProductListUrl = 'atomRiskProduct/findList'
-      findList(atomRiskProductListUrl, {}).then(response => {
-        this.atomRiskProductList = response.data.items
-        resolve()
-      }).catch(error => {
-        this.loading = false
-        reject(error)
-      })
-    })
   },
   methods: {
     handleSizeChange(val) {
@@ -179,12 +139,17 @@ export default {
     },
     fetchData() {
       this.listLoading = true
-      const url = '/apiAccessRecord/findPage'
+      const url = '/statistics/sourceRiskProductStatistics'
       return new Promise((resolve, reject) => {
         if (this.startAndEndDate == null) {
           this.startAndEndDate = []
         }
-        findPage(url, this.entity, { currentPage: this.currentPage - 1, pageSize: this.pageSize, beginCreateTime: this.startAndEndDate[0], endCreateTime: this.startAndEndDate[1] }).then(response => {
+        findPage(url, {}, {
+          currentPage: this.currentPage - 1,
+          pageSize: this.pageSize,
+          beginCreateTime: this.startAndEndDate[0],
+          endCreateTime: this.startAndEndDate[1]
+        }).then(response => {
           this.list = response.data.items
           this.listLoading = false
           this.total = response.data.total
@@ -197,6 +162,7 @@ export default {
     clearUp() {
       this.startAndEndDate = []
       this.entity = {
+        id: '',
         successful: '',
         atomRiskProductId: ''
       }
@@ -205,3 +171,8 @@ export default {
   }
 }
 </script>
+<style>
+  .el-progress.is-warning .el-progress-bar__inner {
+    background-color: #e6a23c;
+  }
+</style>

@@ -221,7 +221,7 @@ export default {
   },
   methods: {
     onBack() {
-      this.$router.push({ path: this.redirect || '/statistical/apiAccessRecordList' })
+      this.$router.push({ path: this.redirect || '/statistics/apiAccessRecordList' })
       this.loading = false
     }
   }
