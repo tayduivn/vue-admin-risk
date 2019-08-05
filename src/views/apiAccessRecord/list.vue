@@ -121,6 +121,13 @@ export default {
       listLoading: true,
       pickerOptions: {
         shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date(new Date().toLocaleDateString())
+            picker.$emit('pick', [start, end])
+          }
+        }, {
           text: '最近一周',
           onClick(picker) {
             const end = new Date()
