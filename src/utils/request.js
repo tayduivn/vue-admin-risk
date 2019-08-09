@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { Message } from 'element-ui'
-import store from '@/store'
-import { getToken } from '@/utils/auth'
+// import store from '@/store'
+import { getToken, setToken, removeToken } from '@/utils/auth'
+import router from '@/router'
 
 // create an axios instance
 const service = axios.create({
@@ -15,7 +16,7 @@ service.interceptors.request.use(
   config => {
     // do something before request is sent
 
-    if (store.getters.token) {
+    if (getToken()) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
@@ -54,6 +55,8 @@ service.interceptors.response.use(
       // 110: Illegal token; 50012: Other clients logged in; 111: Token expired;
       if (res.code === 110 || res.code === 111) {
         errorMsg = '当前会话已失效，请重新登录！'
+        removeToken()
+        router.push(`/login?redirect=${router.history.current.fullPath}`)
       }
       Message({
         message: errorMsg || 'Error',
@@ -63,6 +66,8 @@ service.interceptors.response.use(
 
       return Promise.reject(new Error(errorMsg || 'Error'))
     } else {
+      const token = response.headers['authorization']
+      setToken(token)
       return res
     }
   },
