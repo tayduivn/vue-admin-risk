@@ -1,21 +1,13 @@
 <template>
   <div class="app-container">
     <div>
-      <el-input v-model="entity.id" placeholder="记录编号" style="width:12%" />
+      <el-input v-model="entity.id" placeholder="记录编号" style="width:15%" />
       <el-select v-model="entity.successful" clearable placeholder="请选择调用结果">
         <el-option
           v-for="item in options"
           :key="item.value"
           :label="item.label"
           :value="item.value"
-        />
-      </el-select>
-      <el-select v-model="entity.atomRiskProductId" clearable placeholder="请选择原子风控服务">
-        <el-option
-          v-for="item in atomRiskProductList"
-          :key="item.id"
-          :label="item.name"
-          :value="item.id"
         />
       </el-select>
       <el-date-picker
@@ -42,16 +34,9 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="编号" align="center">
+      <el-table-column label="记录编号" align="center">
         <template slot-scope="scope">
           {{ scope.row.id }}
-        </template>
-      </el-table-column>
-      <el-table-column label="调用原子风控服务" align="center">
-        <template slot-scope="scope">
-          <span>
-            {{ scope.row.atomRiskProductId | atomRiskProductFilter }}
-          </span>
         </template>
       </el-table-column>
       <el-table-column label="调用结果" align="center">
@@ -84,18 +69,10 @@
 </template>
 
 <script>
-import { findPage, findList } from '@/api/table'
+import { findPage } from '@/api/table'
 
-let vm = {}
 export default {
   filters: {
-    atomRiskProductFilter(id) {
-      for (const atomRiskProduct of vm.atomRiskProductList) {
-        if (atomRiskProduct.id === id) {
-          return atomRiskProduct.name
-        }
-      }
-    },
     successfulFilter(successful) {
       const successfulMap = {
         '0': 'success',
@@ -105,17 +82,14 @@ export default {
     }
   },
   data() {
-    vm = this
     return {
       startAndEndDate: [],
       entity: {
         id: '',
-        successful: '',
-        atomRiskProductId: ''
+        successful: ''
       },
       currentPage: 1,
       pageSize: 10,
-      atomRiskProductList: [],
       total: 0,
       list: null,
       listLoading: true,
@@ -164,16 +138,6 @@ export default {
   },
   created() {
     this.fetchData()
-    return new Promise((resolve, reject) => {
-      const atomRiskProductListUrl = 'atomRiskProduct/findList'
-      findList(atomRiskProductListUrl, {}).then(response => {
-        this.atomRiskProductList = response.data.items
-        resolve()
-      }).catch(error => {
-        this.loading = false
-        reject(error)
-      })
-    })
   },
   methods: {
     handleSizeChange(val) {
@@ -207,8 +171,7 @@ export default {
       this.startAndEndDate = []
       this.entity = {
         id: '',
-        successful: '',
-        atomRiskProductId: ''
+        successful: ''
       }
       this.fetchData()
     }

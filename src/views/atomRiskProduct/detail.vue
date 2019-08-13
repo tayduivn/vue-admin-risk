@@ -7,18 +7,18 @@
       <el-form-item label="原子风控服务名称：" prop="name">
         {{ data.name }}
       </el-form-item>
+      <el-form-item label="风控类型：" prop="appId">
+        {{ data.types | typesFilter }}
+      </el-form-item>
+      <el-form-item label="所属风控项：" prop="appId">
+        {{ data.atomRiskTypeId | atomRiskTypeFilter }}
+      </el-form-item>
       <el-form-item label="信任源风控服务：" prop="name">
         <el-tag
           v-for="item in sourceRiskProductList"
           :key="item.id"
           class="el-tag-c"
         >{{ item.name }}</el-tag>
-      </el-form-item>
-      <el-form-item label="所属风控项：" prop="appId">
-        {{ data.atomRiskTypeId | atomRiskTypeFilter }}
-      </el-form-item>
-      <el-form-item label="风控类型：" prop="appId">
-        {{ data.types | typesFilter }}
       </el-form-item>
       <el-form-item label="信任源服务实现：" prop="appId">
         {{ data.caller | callerFilter }}
