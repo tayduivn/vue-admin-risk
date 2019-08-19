@@ -25,12 +25,12 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="数据源风控服务" align="center">
+      <el-table-column label="信任源风控服务" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="所属数据源" align="center">
+      <el-table-column label="所属信任源" align="center">
         <template slot-scope="scope">
           {{ scope.row.sourceConfigName }}
         </template>

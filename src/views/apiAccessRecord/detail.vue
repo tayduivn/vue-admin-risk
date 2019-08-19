@@ -97,7 +97,7 @@
                   :timestamp="sar.createTime"
                 >
                   <el-card class="box-card json-viewer-el-card">
-                    <h3>数据源风控服务[{{ sar.sourceRiskProductId | sourceRiskProductFilter }}]&nbsp;&nbsp;<i v-show="sar.successful=='0'" class="el-icon-success" /><i v-show="sar.successful!='0'" class="el-icon-warning" /></h3>
+                    <h3>信任源风控服务[{{ sar.sourceRiskProductId | sourceRiskProductFilter }}]&nbsp;&nbsp;<i v-show="sar.successful=='0'" class="el-icon-success" /><i v-show="sar.successful!='0'" class="el-icon-warning" /></h3>
                     <div v-show="sar.baseParameter!=null">
                       <h4>请求：</h4>
                       <div class="clearfix">
@@ -218,7 +218,7 @@ export default {
           reject(error)
         })
 
-        // 获取数据源风控产品列表
+        // 获取信任源风控产品列表
         const sourceRiskProductListUrl = 'sourceRiskProduct/findList'
         findList(sourceRiskProductListUrl, {}).then(response => {
           this.sourceRiskProductList = response.data.items

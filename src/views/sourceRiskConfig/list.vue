@@ -169,7 +169,7 @@ export default {
       })
     },
     deleteData(index, list, row) {
-      MessageBox.confirm('您将删除一条记录', '请确认：', {
+      MessageBox.confirm('删除该信任源配置将同时删除该信任源下已配置的所有信任源风控服务！', '请确认：', {
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         type: 'warning'
