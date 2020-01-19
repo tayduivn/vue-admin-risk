@@ -28,7 +28,7 @@
                 <div class="clearfix">
                   <json-viewer
                     :value="apiAccessRecord.apiRequest"
-                    :expand-depth="6"
+                    :expand-depth="2"
                     copyable
                     sort
                   />
@@ -39,7 +39,7 @@
                 <div class="clearfix">
                   <json-viewer
                     :value="apiAccessRecord.apiResult"
-                    :expand-depth="6"
+                    :expand-depth="2"
                     copyable
                     sort
                   />
@@ -50,7 +50,7 @@
                 <div class="clearfix">
                   <json-viewer
                     :value="apiAccessRecord.errorMessage"
-                    :expand-depth="6"
+                    :expand-depth="2"
                     copyable
                     sort
                   />
@@ -77,7 +77,7 @@
                   <div class="clearfix">
                     <json-viewer
                       :value="aar.errorMessage"
-                      :expand-depth="6"
+                      :expand-depth="2"
                       copyable
                       sort
                     />
@@ -103,7 +103,7 @@
                       <div class="clearfix">
                         <json-viewer
                           :value="sar.baseParameter"
-                          :expand-depth="6"
+                          :expand-depth="2"
                           copyable
                           sort
                         />
@@ -114,7 +114,7 @@
                       <div class="clearfix">
                         <json-viewer
                           :value="sar.baseResult"
-                          :expand-depth="6"
+                          :expand-depth="2"
                           copyable
                           sort
                         />
@@ -125,7 +125,7 @@
                       <div class="clearfix">
                         <json-viewer
                           :value="sar.errorMessage"
-                          :expand-depth="6"
+                          :expand-depth="2"
                           copyable
                           sort
                         />
