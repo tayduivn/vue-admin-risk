@@ -44,6 +44,11 @@
           <el-tag :type="scope.row.successful | successfulFilter">{{ scope.row.successful=="0"?"成功":"失败" }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="信任源名称" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.apiResult.riskSourceName }}
+        </template>
+      </el-table-column>
       <el-table-column label="调用时间" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime }}</span>

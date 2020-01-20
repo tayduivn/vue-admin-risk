@@ -7,7 +7,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column align="center" label="编号" width="100">
+      <el-table-column align="center" label="编号">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
@@ -24,14 +24,18 @@
           </span>
         </template>
       </el-table-column>
-      <el-table-column label="优先级" align="center">
+      <el-table-column label="优先级" align="center" width="100">
         <template slot-scope="scope">
           <span>{{ scope.row.level }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column label="风控类型" align="center" width="100">
         <template slot-scope="scope">
-          <!-- <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status?"启用":"禁用" }}</el-tag> -->
+          <span>{{ scope.row.types | typesFilter }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="status-col" label="状态" align="center" width="100">
+        <template slot-scope="scope">
           {{ scope.row.status == "0"?"启用":"已禁用" }}
         </template>
       </el-table-column>
@@ -40,11 +44,9 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作">
+      <el-table-column align="center" label="操作" width="310">
         <template slot-scope="scope">
           <el-button type="success" size="small" @click="$router.push({ name: 'atomRiskProductDetail', params: { id: scope.row.id }})">查看</el-button>
-          <!-- <el-button v-show="!scope.row.edit" type="primary" size="small" @click="$set(scope.row,'edit',true)">编辑</el-button> -->
-          <!-- <el-button v-show="scope.row.edit" type="success" size="small" @click="updateData(scope.row)">保存</el-button> -->
           <el-button type="primary" size="small" @click="$router.push({ name: 'atomRiskProductUpdate', params: { id: scope.row.id }})">编辑</el-button>
           <el-button v-show="scope.row.status != 0" type="success" size="small" @click="enableData(scope.row)">启用</el-button>
           <el-button v-show="scope.row.status == 0" type="warning" size="small" @click="disableData(scope.row)">禁用</el-button>
