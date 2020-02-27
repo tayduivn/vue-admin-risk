@@ -30,6 +30,11 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="风控类型" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.types | typesFilter }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="成功次数" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.success }}</span>
@@ -83,6 +88,13 @@ export default {
       } else {
         return 'exception'
       }
+    },
+    typesFilter(value) {
+      const typesMap = {
+        'personal': '个人',
+        'enterprise': '企业'
+      }
+      return typesMap[value]
     }
   },
   data() {
